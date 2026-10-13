@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #0E9AA7;
+    --color-primary-hover: #0B7C87;
+    --color-primary-dark: #075E66;
+    --color-secondary: #12355B;
+    --color-accent: #FF6B4A;
+    --color-accent-hover: #E8532F;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-surface text-text-primary antialiased;
+    overflow-x: hidden;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 1024px) {
+    body {
+      font-size: 17px;
+    }
+  }
+
+  /* Language-specific font and line-height switching (Section 3) */
+  [lang="en"] {
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  [lang="en"] h1,
+  [lang="en"] h2,
+  [lang="en"] h3,
+  [lang="en"] h4,
+  [lang="en"] h5,
+  [lang="en"] h6 {
+    font-family: var(--font-poppins), sans-serif;
+  }
+
+  [lang="ur"],
+  [lang="ur"] h1,
+  [lang="ur"] h2,
+  [lang="ur"] h3,
+  [lang="ur"] h4,
+  [lang="ur"] p,
+  [lang="ur"] span,
+  [lang="ur"] a,
+  [lang="ur"] button,
+  [lang="ur"] input,
+  [lang="ur"] select,
+  [lang="ur"] textarea {
+    font-family: var(--font-urdu), var(--font-inter), serif;
+    line-height: 2.1;
+  }
+
+  [lang="sd"],
+  [lang="sd"] h1,
+  [lang="sd"] h2,
+  [lang="sd"] h3,
+  [lang="sd"] h4,
+  [lang="sd"] p,
+  [lang="sd"] span,
+  [lang="sd"] a,
+  [lang="sd"] button,
+  [lang="sd"] input,
+  [lang="sd"] select,
+  [lang="sd"] textarea {
+    font-family: var(--font-sindhi), var(--font-inter), serif;
+    line-height: 1.9;
+  }
+
+  /* Accessible visible focus ring: 3px teal at 40% opacity (Section 3) */
+  *:focus-visible {
+    outline: 3px solid rgba(14, 154, 167, 0.45);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .container-clinic {
+    @apply mx-auto w-full max-w-container px-5 lg:px-10;
+  }
+
+  .section-padding {
+    @apply py-12 lg:py-20;
+  }
+
+  .heading-h1 {
+    @apply text-[32px] lg:text-[52px] font-bold leading-[1.15] tracking-tight;
+  }
+
+  .heading-h2 {
+    @apply text-[26px] lg:text-[38px] font-semibold leading-[1.25] tracking-tight;
+  }
+
+  .heading-h3 {
+    @apply text-[20px] lg:text-[24px] font-semibold leading-[1.35];
+  }
+
+  /* Button Styles (Section 3) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 min-h-[48px] min-w-[44px] px-7 rounded-btn bg-primary text-white text-[16px] font-semibold transition-all duration-200 hover:bg-primary-hover hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 min-h-[48px] min-w-[44px] px-7 rounded-btn bg-accent text-white text-[16px] font-semibold transition-all duration-200 hover:bg-accent-hover hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none shadow-sm;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 min-h-[48px] min-w-[44px] px-7 rounded-btn border-2 border-primary bg-transparent text-primary text-[16px] font-semibold transition-all duration-200 hover:bg-primary hover:text-white hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-outline-white {
+    @apply inline-flex items-center justify-center gap-2 min-h-[48px] min-w-[44px] px-7 rounded-btn border-2 border-white bg-transparent text-white text-[16px] font-semibold transition-all duration-200 hover:bg-white hover:text-secondary hover:-translate-y-0.5 active:translate-y-0;
+  }
+
+  .card-clinic {
+    @apply bg-surface border border-surface-border rounded-card shadow-card transition-all duration-300 hover:shadow-card-hover;
+  }
+
+  .input-clinic {
+    @apply w-full min-h-[48px] px-4 py-2.5 rounded-input border border-surface-border bg-white text-text-primary text-[16px] transition-colors placeholder:text-text-secondary/60 focus:border-primary focus:outline-none;
+  }
+}
+
+/* Respect prefers-reduced-motion (Section 3) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Swiper custom pagination bullets */
+.swiper-pagination-bullet {
+  background: #0E9AA7 !important;
+  opacity: 0.35 !important;
+  width: 10px !important;
+  height: 10px !important;
+  transition: all 0.25s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+  width: 26px !important;
+  border-radius: 999px !important;
+  background: #FF6B4A !important;
+}
+
+/* Flip directional icons in RTL when marked with .rtl-flip */
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}

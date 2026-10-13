@@ -1,0 +1,104 @@
+// Prisma Schema for MediCare Hub
+// Compatible with SQLite (local dev) and PostgreSQL (production)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  name            String
+  nameUr          String        @default("")
+  nameSd          String        @default("")
+  specialty       String
+  specialtyUr     String        @default("")
+  specialtySd     String        @default("")
+  serviceSlug     String        @default("general-physician")
+  qualification   String
+  experienceYears Int
+  bio             String
+  bioUr           String        @default("")
+  bioSd           String        @default("")
+  photo           String
+  fee             Int
+  languages       String        // JSON array string e.g. '["English","Urdu","Sindhi"]'
+  availability    String        // JSON object string mapping day -> slots or start/end time
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  appointments    Appointment[]
+}
+
+model Service {
+  id           String        @id @default(cuid())
+  slug         String        @unique
+  title        String
+  titleUr      String        @default("")
+  titleSd      String        @default("")
+  description  String
+  descriptionUr String       @default("")
+  descriptionSd String       @default("")
+  whatWeTreat  String        @default("[]") // JSON array string
+  howToPrepare String        @default("[]") // JSON array string
+  feeFrom      Int
+  category     String        // "General" | "Women & Child" | "Diagnostics" | "Dental"
+  icon         String        @default("Stethoscope")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
+}
+
+model Appointment {
+  id            String   @id @default(cuid())
+  reference     String   @unique
+  doctorId      String
+  serviceId     String
+  date          String   // YYYY-MM-DD (Western digits)
+  timeSlot      String   // e.g. "10:00 AM"
+  activeSlotKey String?  @unique // "${doctorId}_${date}_${timeSlot}" when status != Cancelled, null when Cancelled
+  patientName   String
+  phone         String
+  email         String?
+  age           Int?
+  gender        String?
+  reason        String?
+  status        String   @default("Pending") // Pending | Confirmed | Completed | Cancelled | No-show
+  source        String   @default("web")     // "web" | "chatbot"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  doctor  Doctor  @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([doctorId, date, timeSlot])
+  @@index([date])
+  @@index([status])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model ChatLead {
+  id        String   @id @default(cuid())
+  name      String?
+  phone     String
+  type      String   @default("callback") // "callback" | "lab_report"
+  details   String?  // e.g. test name or inquiry note
+  locale    String   @default("en")
+  status    String   @default("New")      // "New" | "Contacted" | "Resolved"
+  createdAt DateTime @default(now())
+}
